@@ -8,8 +8,9 @@ The recommended way to install ModularPHP is through
 [Composer](https://getcomposer.org/).
 
 ```bash
-composer require modularphp
-composer install
+composer create-project modular-php/php-framework
+cd php-framework
+php -S localhost:8000
 ```
 
 ## License
