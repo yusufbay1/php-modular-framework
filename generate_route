@@ -1,0 +1,33 @@
+<?php
+// generate_route_cache.php
+$modulesPath = __DIR__ . '/app/Modules';
+$cacheFile = __DIR__ . '/storage/routes.cache.php';
+
+$routes = [];
+
+// Her modül için route dosyalarını topla
+$dirIterator = new DirectoryIterator($modulesPath);
+foreach ($dirIterator as $fileinfo) {
+    if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+        $moduleRoutesPath = "{$modulesPath}/{$fileinfo->getFilename()}/routes";
+        if (is_dir($moduleRoutesPath)) {
+            $routeFiles = glob("{$moduleRoutesPath}/*.php");
+            foreach ($routeFiles as $routeFile) {
+                $routes[] = $routeFile;
+            }
+        }
+    }
+}
+
+// Cache dosyasının içeriğini oluştur
+$cacheContent = "<?php\n\n// Bu dosya otomatik olarak oluşturulmuştur. Manuel olarak düzenlemeyin.\n\n";
+
+foreach ($routes as $route) {
+    $relativePath = str_replace(__DIR__ . '/', '', $route);
+    echo $relativePath . "\n";
+    $cacheContent .= "require_once '{$relativePath}';\n";
+}
+
+// Cache dosyasına yaz
+file_put_contents($cacheFile, $cacheContent);
+echo "Route cache başarıyla oluşturuldu: {$cacheFile}\n";

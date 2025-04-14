@@ -1,0 +1,72 @@
+0
+e3ee8a3d01d8d6147afd0cb3f30176b1
+s:2301:"<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="https://local8.iycv2.com"/>
+    <title></title>
+    <meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>    </head>
+<body>
+<main>
+        <div style="min-height: 100vh; background: #000; display: flex; align-items: center; justify-content: center;text-align: center">
+        <div style="max-width: 500px; margin: 0 auto;">
+            <img src="./public/images/modular.png" alt="Logo" style="width: 100%;" class="rotating-logo"/>
+            <h1 style="font-size: 2.5rem; color: #333; margin-bottom: 1rem;margin-top: 0;"  class="shimmer">Welcome to Modular PHP</h1>
+            <p style="font-size: 1.2rem; color: #666; margin-bottom: 2rem;margin-top: 0;">
+                A modular PHP framework for building scalable applications.
+                <br>
+                This is a demo page to showcase the framework's capabilities.
+            </p>
+            <a href="/docs" style="padding: 0.75rem 1.5rem; font-size: 1rem; background: #1a1a1a; color: white; border-radius: 6px; text-decoration: none; transition: background 0.3s ease;">
+                Documentation
+            </a>
+        </div>
+    </div>
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background: #000;
+        }
+        .rotating-logo{
+            animation: slow-rotate 20s linear infinite;
+            display: block;
+            margin: auto;
+        }
+
+        .shimmer{
+            display: inline-block;
+            position: relative;
+            background: linear-gradient(to right,
+            #444 0%,
+            #444 40%,
+            #fff 50%,
+            #444 60%,
+            #444 100%);
+            background-size: 200% 100%;
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: shimmerFlat 2s infinite;
+        }
+
+        @keyframes shimmerFlat {
+            0% {
+                background-position: 200% 0;
+            }
+        }
+
+        @keyframes slow-rotate {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</main>
+</body>
+</html>";

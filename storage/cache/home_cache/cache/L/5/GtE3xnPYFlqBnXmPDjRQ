@@ -1,0 +1,33 @@
+0
+0694129da4d3786ee26f31593e05a972
+s:1198:"<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="https://local.modular-php.com/user/3"/>
+    <title></title>
+    <meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>    </head>
+<body>
+<main>
+        <div style="min-height: 100vh; background: #f1f1f1; display: flex; align-items: center; justify-content: center;text-align: center">
+        <div style="max-width: 500px; margin: 0 auto;">
+            <img src="./public/images/modular.png" alt="Logo" style="width: 100%; margin-bottom: 2rem;border:1px solid #d6d6d6" class="rotating-logo">
+            <p style="font-size: 1.2rem; color: #555; margin-bottom: 2rem;">
+                PHP yapınıza hoş geldiniz. Bu, PHP ile geliştirilmiş bir framework'tür.
+            </p>
+            <a href="/docs" style="padding: 0.75rem 1.5rem; font-size: 1rem; background: #1a1a1a; color: white; border-radius: 6px; text-decoration: none; transition: background 0.3s ease;">
+                Belgeleri Görüntüle
+            </a>
+        </div>
+    </div>
+
+    <style>
+        body{
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+        }
+    </style>
+</main>
+</body>
+</html>";

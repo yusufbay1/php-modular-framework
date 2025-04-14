@@ -1,0 +1,60 @@
+<?php
+
+require_once __DIR__ . '/vendor/autoload.php';
+require_once __DIR__ . '/core/Router/RouteDefinition.php';
+require_once __DIR__ . '/core/Router/Route.php';
+require_once __DIR__ . '/routes/web.php';
+require_once __DIR__ . '/routes/api.php';
+
+use Router\Route;
+
+$argv = $_SERVER['argv'];
+$command = $argv[1] ?? null;
+
+switch ($command) {
+    case 'route:cache':
+        require_module_routes(); // modül rotalarını yükle
+        Route::cacheRoutes('storage/routes.cache');
+        echo "✅ Route cache created.\n";
+        break;
+
+    case 'route:clear':
+        $cacheFile ='storage/routes.cache';
+        if (file_exists($cacheFile)) {
+            unlink($cacheFile);
+            echo "🧹 Route cache cleared.\n";
+        } else {
+            echo "⚠️ No route cache file found.\n";
+        }
+        break;
+
+    default:
+        echo "🛠  Available commands:\n";
+        echo "  route:cache     Cache the defined routes\n";
+        echo "  route:clear     Clear the route cache\n";
+        break;
+}
+
+/**
+ * Modül dizinlerindeki rotaları dahil eder.
+ */
+function require_module_routes(): void
+{
+    $modulesPath = __DIR__ . '/app/Modules';
+
+    if (!is_dir($modulesPath)) return;
+
+    $modules = scandir($modulesPath);
+
+    foreach ($modules as $module) {
+        if ($module === '.' || $module === '..') continue;
+
+        $routesDir = $modulesPath . "/$module/routes";
+        if (is_dir($routesDir)) {
+            $routeFiles = glob("$routesDir/*.php");
+            foreach ($routeFiles as $file) {
+                require_once $file;
+            }
+        }
+    }
+}

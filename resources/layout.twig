@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <base href="{{ base() }}"/>
+    <title>{{ title }}</title>
+    {% include 'layout/head.twig' %}
+    {% block css %}{% endblock %}
+</head>
+<body>
+<main>
+    {% block content %}{% endblock %}
+</main>
+{% block after_script %}{% endblock %}
+{% include 'layout/footer.twig' %}
+{% block script %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,119 @@
+<?php
+require_once 'core/AutoLoad/AutoLoad.php';
+Loader::autoloader();
+$modulesPath = __DIR__ . '/app/Modules';
+$migrationFiles = [];
+
+if ($argc < 2) {
+    echo "Usage: php run_migrations.php <run:all|run:ModuleName|create:ModuleName> [method|filename]\n";
+    exit(1);
+}
+
+$command = $argv[1];
+$methodOrFilename = $argv[2] ?? null;
+
+if (strpos($command, 'create:') === 0) {
+    $moduleName = substr($command, 7);
+
+    if (!$methodOrFilename) {
+        echo "Error: Please provide a filename for the migration.\n";
+        exit(1);
+    }
+
+    $migrationPath = "{$modulesPath}/{$moduleName}/database/migrations";
+
+    if (!is_dir($migrationPath)) {
+        if (!mkdir($migrationPath, 0777, true)) {
+            echo "Error: Unable to create migrations directory for module '{$moduleName}'.\n";
+            exit(1);
+        }
+    }
+
+    $migrationFile = "{$migrationPath}/{$methodOrFilename}.php";
+
+    if (file_exists($migrationFile)) {
+        echo "Error: Migration file '{$methodOrFilename}.php' already exists in module '{$moduleName}'.\n";
+        exit(1);
+    }
+
+    $migrationTemplate = <<<PHP
+<?php
+
+use Core\Database\{Blueprint, Schema};
+
+return new class
+{
+    public function up(): void
+    {
+        Schema::create('{$methodOrFilename}', function (Blueprint \$table) {
+            \$table->id();
+            \$table->timestamps();
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::drop('{$methodOrFilename}');
+    }
+};
+PHP;
+
+    if (file_put_contents($migrationFile, $migrationTemplate) !== false) {
+        echo "Migration file '{$methodOrFilename}.php' created successfully in module '{$moduleName}'.\n";
+    } else {
+        echo "Error: Unable to create migration file '{$methodOrFilename}.php'.\n";
+        exit(1);
+    }
+
+    exit(0);
+}
+
+$methodToRun = $argv[2] ?? 'up'; // Varsayılan olarak 'up' metodunu çalıştır
+
+if (!in_array($methodToRun, ['up', 'down'])) {
+    echo "Invalid method. Allowed methods are: 'up', 'down'.\n";
+    exit(1);
+}
+
+if ($command === 'run:all') {
+    $dirIterator = new DirectoryIterator($modulesPath);
+
+    foreach ($dirIterator as $fileinfo) {
+        if ($fileinfo->isDir() && !$fileinfo->isDot()) {
+            $migrationPath = "{$modulesPath}/{$fileinfo->getFilename()}/Database/Migrations";
+            if (is_dir($migrationPath)) {
+                $files = glob("{$migrationPath}/*.php");
+                foreach ($files as $file) {
+                    $migrationFiles[] = $file;
+                }
+            }
+        }
+    }
+} elseif (strpos($command, 'run:') === 0) {
+    $moduleName = substr($command, 4);
+    $migrationPath = "{$modulesPath}/{$moduleName}/Database/Migrations";
+    if (is_dir($migrationPath)) {
+        $files = glob("{$migrationPath}/*.php");
+        foreach ($files as $file) {
+            $migrationFiles[] = $file;
+        }
+    } else {
+        echo "Module '{$moduleName}' not found or has no migrations.\n";
+        exit(1);
+    }
+} else {
+    echo "Invalid command. Usage: php run_migrations.php <run:all|run:ModuleName|create:ModuleName> [method|filename]\n";
+    exit(1);
+}
+
+foreach ($migrationFiles as $file) {
+    $migrationClass = require_once $file;
+    echo $file . "\n";
+
+    if (is_object($migrationClass) && method_exists($migrationClass, $methodToRun)) {
+        $migrationClass->$methodToRun();
+        echo "Ran '{$methodToRun}' method for migration: {$file}\n";
+    } else {
+        echo "Method '{$methodToRun}' not found in migration: {$file}\n";
+    }
+}

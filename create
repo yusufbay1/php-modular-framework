@@ -1,0 +1,37 @@
+<?php
+
+// Check if a module name is provided
+if ($argc < 2) {
+    echo "Usage: php create_module.php <module_name>\n";
+    exit(1);
+}
+
+$moduleName = $argv[1];
+$baseDir = __DIR__ . '/app/Modules/';
+$modulePath = $baseDir . $moduleName;
+
+$folders = [
+    'Controllers',
+    'Models',
+    'routes',
+    'views',
+    'database/migrations',
+];
+
+if (!@mkdir($modulePath, 0755, true) && !is_dir($modulePath)) {
+    throw new \RuntimeException(sprintf('Directory "%s" was not created', $modulePath));
+}
+
+foreach ($folders as $folder) {
+    $folderPath = $modulePath . '/' . $folder;
+    @mkdir($folderPath, 0755, true);
+}
+
+file_put_contents($modulePath . '/Controllers/' . $moduleName . 'Controller.php', data: "<?php\n\nnamespace App\\Modules\\$moduleName\\Controllers;\nuse use App\Http\Controllers\Controller;;\n\nclass {$moduleName}Controller extends Controller {\n    // Controller logic\n}");
+file_put_contents($modulePath . '/Models/' . $moduleName . '.php', "<?php\n\nnamespace App\\Modules\\$moduleName\\Models;\nuse App\Models\Model;\n\nclass {$moduleName} extends Model{\n    // Model logic\n}");
+file_put_contents($modulePath . '/routes/route.php', "<?php\n\nuse Router\Route;");
+file_put_contents($modulePath . '/views/index.twig', "{% extends \"layout.twig\" %}\n\n{% block content %}\n\n{% endblock %}");
+
+require_once 'generate_route';
+
+echo "'{$moduleName}' adlı modül oluşturuldu.\n";
