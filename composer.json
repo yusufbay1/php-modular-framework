@@ -1,5 +1,5 @@
 {
-  "name": "yusufhangun/moduleframework",
+  "name": "modular-php/php-framework",
   "description": "A modular PHP application",
   "type": "project",
   "require": {
@@ -16,8 +16,7 @@
   "license": "MIT",
   "authors": [
     {
-      "name": "Yusuf Hangün",
-      "email": "yusufhangun03@outlook.com"
+      "name": "Modular Technology"
     }
   ],
   "minimum-stability": "stable"
