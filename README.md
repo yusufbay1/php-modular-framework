@@ -1,4 +1,4 @@
-![Modular](files/modular.png?raw=true)
+![Modular](files/modular2.png?raw=true)
 
 # Moduler, PHP Framework
 
