@@ -4,7 +4,7 @@
 
 ## Installing Modular Framework
 
-The recommended way to install Guzzle is through
+The recommended way to install ModularPHP is through
 [Composer](https://getcomposer.org/).
 
 ```bash
