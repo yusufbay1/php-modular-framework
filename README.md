@@ -9,6 +9,7 @@ The recommended way to install Guzzle is through
 
 ```bash
 composer require modularphp
+composer install
 ```
 
 
